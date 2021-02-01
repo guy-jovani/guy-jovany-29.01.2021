@@ -1,7 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 import axios from 'axios';
 
-const url = 'https://git.heroku.com/herolo-test-1.git/manage';
+const url = 'https://herolo-test-1.herokuapp.com/manage/';
 
 const getMsgRes = payload => {
   return {
@@ -23,6 +23,7 @@ export const getMessagesAttempt = payload => {
       }));
     })
     .catch(err => {
+      console.log(err)
       dispatch(getMsgRes({
         errorMessages: err.response.data.messages,
         success: false
