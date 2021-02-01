@@ -1,7 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 import axios from 'axios';
 
-const url = 'http://localhost:5000/manage/';
+const url = 'https://git.heroku.com/herolo-test-1.git/manage';
 
 const postMsgRes = payload => {
   return {
