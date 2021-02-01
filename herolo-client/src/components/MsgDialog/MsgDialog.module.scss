@@ -1,0 +1,29 @@
+
+
+
+
+.MsgDialog {
+  position: absolute;
+  bottom: 100px;
+  z-index: 1000;
+  margin: auto;
+  width: 400px;
+  background-color: #eb2929;
+  padding: 15px;
+  border-radius: 25px;
+  left: calc(50vw - 200px);
+  color: white;
+  cursor: pointer;
+  
+  @media (max-height: 520px), (max-width: 500px) {
+    bottom: 20px;
+  }
+}
+
+.MsgDialogShow {
+  display: show;
+}
+
+.MsgDialogHide {
+  display: none;
+}

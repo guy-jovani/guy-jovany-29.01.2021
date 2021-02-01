@@ -1,0 +1,36 @@
+
+
+
+.Compose {
+  width: 100%;
+  max-width: 1024px;
+  padding: 50px;
+  margin: auto;
+
+  button {
+    padding: 15px;
+    border-radius: 15px;
+    background-color: lightgrey;
+    font-size: larger;
+    border: 1px solid lightgrey;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      &:not(:disabled) {
+        background-color: grey;
+      }
+    }
+  }
+
+  @media (max-width: 650px) {
+    padding: 30px;
+  }
+
+  @media (max-width: 450px) {
+    padding: 15px;
+  }
+}

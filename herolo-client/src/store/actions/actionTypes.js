@@ -1,0 +1,8 @@
+export const COMPOSE_LOADING = 'COMPOSE_LOADING';
+export const COMPOSE_RESULT = 'COMPOSE_RESULT';
+export const COMPOSE_RESET = 'COMPOSE_RESET';
+
+export const MANAGE_LOADING = 'MANAGE_LOADING';
+export const MANAGE_GET = 'MANAGE_GET';
+export const MANAGE_RESET = 'MANAGE_RESET';
+export const MANAGE_DELETE = 'MANAGE_DELETE';

@@ -1,0 +1,141 @@
+
+
+
+.Manage {
+  width: 100%;
+  max-width: 1024px;
+  padding: 50px;
+  margin: auto;
+
+  .Form_Button {
+    padding: 15px;
+    border-radius: 15px;
+    background-color: lightgrey;
+    font-size: larger;
+    border: 1px solid lightgrey;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      &:not(:disabled) {
+        background-color: grey;
+      }
+    }
+  }
+
+  .Mails {
+    border: 1px solid lightgrey;
+    margin-top: 25px;
+
+    ul {
+      padding: 0;
+
+      @media (max-width: 600px) {
+        display: flex;
+        overflow: auto;
+        height: 450px;
+      }
+    }
+
+    .Sticky {
+      position: sticky;
+      background-color: lightgrey;
+      z-index: 10;
+      top: 75px;
+
+      @media (max-width: 600px) {
+        left: 0px;
+        top: 0;
+
+        p {
+          &:not(:last-child) {
+            height: auto;
+          }
+        }
+      }
+    }
+
+    li {
+      list-style: none;
+      display: flex;
+      padding: 10px;
+
+      p {
+        width: 22%;
+        padding: 0 5px;
+      }
+
+      button {
+        min-width: 12%;
+        width: max-content;
+        cursor: pointer;
+        border-radius: 15px;
+        border: none;
+        height: 50px;
+        align-self: center;
+
+        &:hover {
+          background-color: #e7e7e7;
+        }
+      }
+
+      @media (max-width: 600px) {
+        flex-direction: column;
+        flex-shrink: 0;
+
+        &:not(:first-child) {
+          width: 150px;
+          border-right: 1px solid lightgrey;
+        }
+
+        p {
+          width: 100%;
+          height: 22%;
+          
+          &:not(:last-child) {
+            height: auto;
+          }
+
+          &:nth-child(4) {
+            flex-grow: 1;
+            overflow: auto;
+          }
+        }
+      }
+    }
+
+    .Tabs {
+      display: flex;
+      border-bottom: 1px solid lightgrey;
+      align-items: center;
+      justify-content: center;
+
+      h4 {
+        flex-grow: 1;
+        text-align: center;
+        cursor: pointer;
+        margin: 0;
+        padding: 20px;
+        
+        &:hover {
+          background: lightgrey;
+        }
+
+        &.Active {
+          background: #d3d3d3c4;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 650px) {
+    padding: 30px;
+  }
+
+  @media (max-width: 450px) {
+    padding: 15px;
+  }
+}

@@ -1,0 +1,46 @@
+
+
+.NavigationItem {
+  height: 100%;
+  width: 120%;
+  cursor: pointer;
+  min-width: max-content;
+
+  @media (max-width: 699px) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.NavigationItem a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+  height: 100%;
+  width: 100%;
+  color: black;
+  padding: 0 20px;
+
+  &:hover {
+    background-color: #8080806e;
+  }
+
+  @media (max-width: 699px) {
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 0;
+    align-items: center;
+  }
+}
+
+.active {
+  font-weight: bold;
+  border-bottom: 3px solid #51514e;
+  font-size: x-large;
+
+  @media (max-width: 699px) {
+    background  : none;
+    border: none;
+  }
+}
