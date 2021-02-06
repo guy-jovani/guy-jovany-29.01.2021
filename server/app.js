@@ -3,7 +3,9 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const routes = require('./routes/routes');
+const emailRoutes = require('./routes/email');
+const authRoutes = require('./routes/auth');
+const checkAuth = require('./middleware/checkAuth');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,7 +17,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/manage', routes);
+app.use('/email', checkAuth, emailRoutes);
+app.use('/auth', authRoutes);
 
 app.use((req, res, next) => {
   res.status(200).json({

@@ -1,7 +1,10 @@
 import * as actionTypes from '../actions/actionTypes';
 import axios from 'axios';
 
-const url = 'https://herolo-test-1.herokuapp.com/manage/';
+import { refreshToken } from './utility';
+
+// const url = 'http://localhost:5000/email/';
+const url = 'https://herolo-test-1.herokuapp.com/email/';
 
 const postMsgRes = payload => {
   return {
@@ -11,22 +14,27 @@ const postMsgRes = payload => {
 }
 
 export const postMsgAttempt = payload => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch({ type: actionTypes.COMPOSE_LOADING });
     axios.post(url + 'post', { 
-      subject: payload.subject, 
-      message: payload.content, 
-      sender: +payload.sender, 
-      receiver: +payload.receiver 
-    })
+        subject: payload.subject, 
+        message: payload.content,
+        receiver: payload.receiver 
+      },
+      { headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`} }
+    )
     .then(res => {
       dispatch(postMsgRes({success: true}));
     })
     .catch(err => {
-      dispatch(postMsgRes({
-        errorMessages: err.response.data.messages,
-        success: false
-      }));
+      if (err.response.data.type === 'TokenExpiredError') {
+        refreshToken(dispatch, postMsgAttempt, postMsgRes, payload, getState().authReducer.timeoutId);
+      } else {
+        dispatch(postMsgRes({
+          errorMessages: err.response.data.messages,
+          success: false
+        }));
+      }
     });
   };
 };

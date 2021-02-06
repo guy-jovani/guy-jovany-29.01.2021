@@ -1,0 +1,29 @@
+.Auth {
+  max-width: 1024px;
+  width: 60%;
+  margin: auto;
+
+  .Form_Button {
+    padding: 15px;
+    border-radius: 15px;
+    background-color: lightgrey;
+    font-size: larger;
+    border: 1px solid lightgrey;
+    cursor: pointer;
+    margin-right: 20px;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      &:not(:disabled) {
+        background-color: grey;
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+}

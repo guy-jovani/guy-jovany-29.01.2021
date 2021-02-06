@@ -9,14 +9,14 @@ export const updateObject = (oldObject, updatedProperties) => {
 
 export const checkValidity = (value, rules) => {
   let errorMessages = [];
-  const numPat = /^\d+$/;
+  const emailPat = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
   if (rules.required && value.trim() === '') {
     errorMessages.push('This field is required.');
   }
 
-  if (rules.isNumeric && !numPat.test(value)) {
-    errorMessages.push('This field should contain only numeric characters (can only be a positive number).');
+  if (rules.isEmail && !emailPat.test(value)) {      
+    errorMessages.push('Please provide a valid Email address.');
   }
   
   if (rules.minLength && value.trim().length < rules.minLength) {

@@ -13,10 +13,12 @@ import thunk from 'redux-thunk';
 import './index.css';
 import composeReducer from './store/reducers/compose';
 import manageReducer from './store/reducers/manage';
+import authReducer from './store/reducers/auth';
 
 const store = createStore(combineReducers({
   composeReducer: composeReducer,
   manageReducer: manageReducer,
+  authReducer: authReducer,
 }), applyMiddleware(thunk));
 
 ReactDOM.render(

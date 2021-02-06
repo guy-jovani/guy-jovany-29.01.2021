@@ -5,65 +5,25 @@ import React, { useState, useEffect }  from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
 import classes from './Manage.module.scss';
-import { inputChangeHandler } from '../../shared/utility';
 import Loading from '../../components/UI/Loading/Loading';
-import Input from '../../components/UI/Input/Input';
 import MsgDialog from '../../components/MsgDialog/MsgDialog';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
 
 const Manage = props => { 
 
-  const [errorMsg, setErrorMsg] = useState([]);
   const [confirmDialog, setConfirmDialog] = useState(false);
   const [deleteInd, setDeleteInd] = useState(-1);
   const [showMsg, setShowMsg] = useState(false);
   const [listSent, setListSent] = useState(true);
-  
-  const [form, setForm] = useState({
-    idForm: {
-      id: {
-        elementType: 'input', 
-        elementProps: {
-          type: 'text',
-          id: 'id',
-          placeholder: "The User Id you want to look for.",
-          value: ''
-        },
-        validation: {
-          required: true,
-          isNumeric: true
-        },
-        valid: false,
-        errorMessages: [],
-        label: 'User Id:'
-      }
-    },
-    formValid: false
-  });
 
   useEffect(() => {
+    props.onSubmit();
     return props.onReset;
   }, []);
 
   const changeTab = e => {
     setListSent(e.target.textContent === 'Sent');
   }
-  
-  const submitIdHandler = e => {
-    e.preventDefault();
-    setShowMsg(true);
-    if (!form.formValid) {
-      setErrorMsg(['The Form is Invalid']);
-      setTimeout(() => {
-        setErrorMsg([]);
-        setShowMsg(false);
-      }, 2000);
-      return;
-    }
-    const id = form.idForm.id.elementProps.value;
-
-    props.onSubmit(id);
-  };
 
   const deleteMail = (allow) => {
     if (allow) {
@@ -114,19 +74,7 @@ const Manage = props => {
   return (
     <div className={classes.Manage}>
       <ConfirmationDialog msg='Are you sure?' action={deleteMail} show={confirmDialog}/>
-      <form className={classes.Contact_Info} onSubmit={submitIdHandler} noValidate>
-        <h4>ID finder</h4>
-        {
-          Object.entries(form.idForm).map((ele, i) => {
-            return <Input 
-              key={i} 
-              {...ele[1]} 
-              changed={(event) => 
-                inputChangeHandler(event, ele[1].elementProps.id, form.idForm, setForm, 'idForm')} />
-          })
-        }
-        <button disabled={!form.formValid} className={classes.Form_Button}>Get</button>
-      </form>
+      <button className={classes.Form_Button} onClick={props.onSubmit}>Refresh</button>
       { props.loading ? <Loading /> : (
         <div className={classes.Mails}>
         <div className={classes.Tabs}>
@@ -146,8 +94,7 @@ const Manage = props => {
       </div>
       ) }
       
-      <MsgDialog msg={errorMsg.length ? errorMsg : props.errorMessages}
-                  show={showMsg} hideMsg={hideMsg}/>
+      <MsgDialog msg={props.errorMessages} show={showMsg} hideMsg={hideMsg}/>
     </div>
   );
 };

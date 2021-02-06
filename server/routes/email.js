@@ -10,19 +10,16 @@ const { body, query } = require('express-validator');
 
 
 
-const controller = require('../controllers/controllers');
+const controller = require('../controllers/email');
 
 router.post('/post', [
-  body('sender')
-    .exists()
-    .notEmpty()
-    .isInt({ gt: 0 })
-    .withMessage('The Sender Id should be a positive number.'),
-  body('receiver')
-    .exists()
-    .notEmpty()
-    .isInt({ gt: 0 })
-    .withMessage('The Receiver Id should be a positive number.'),
+  body('receiver').custom((value, { req }) => {
+    const emailPat = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+    if (!value || !emailPat.test(value)) {
+      throw new Error('Please provide a valid recipient email address.');
+    }
+    return true;
+  }),
   body('subject')
     .exists()
     .isLength(3)
@@ -33,14 +30,7 @@ router.post('/post', [
     .withMessage('The Message field is required.'),
 ], controller.post);
 
-router.get('/get', [
-  query('id')
-    .exists()
-    .not()
-    .isEmpty()
-    .isInt({ gt: 0 })
-    .withMessage('The Id should be a positive number.'),
-], controller.get);
+router.get('/get', controller.get);
 
 router.delete('/delete', [
   body('type').custom((value, { req }) => {
@@ -53,16 +43,6 @@ router.delete('/delete', [
     }
     return true;
   }),
-  body('sender')
-    .exists()
-    .notEmpty()
-    .isInt({ gt: 0 })
-    .withMessage('The Sender Id should be a positive number.'),
-  body('receiver')
-    .exists()
-    .notEmpty()
-    .isInt({ gt: 0 })
-    .withMessage('The Receiver Id should be a positive number.'),
   body('creation').custom((value, { req }) => {
     if (!value || value.trim() === '') {
       throw new Error('"Creation" field is a required field.');

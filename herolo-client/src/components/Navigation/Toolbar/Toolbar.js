@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import NavigationItems from '../NavigationItems/NavigationItems';
+import NavigationItems from '../../../containers/NavigationItems/NavigationItems';
 import DrawerToggle from '../DrawerToggle/DrawerToggle';
 import classes from './Toolbar.module.scss';
 

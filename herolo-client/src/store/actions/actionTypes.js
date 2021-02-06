@@ -6,3 +6,9 @@ export const MANAGE_LOADING = 'MANAGE_LOADING';
 export const MANAGE_GET = 'MANAGE_GET';
 export const MANAGE_RESET = 'MANAGE_RESET';
 export const MANAGE_DELETE = 'MANAGE_DELETE';
+
+
+export const AUTH_LOADING = 'AUTH_LOADING';
+export const AUTH_NEW_TOKEN = 'AUTH_NEW_TOKEN';
+export const AUTH_RESULT = 'AUTH_RESULT';
+export const AUTH_LOGOUT = 'AUTH_LOGOUT';

@@ -1,47 +1,21 @@
 
 
-const { validationResult } = require('express-validator');
+const handleErrors = require('../shared/utility').handleErrors;
+
 const Message = require('../models/Message');
-const sentTable = {};
-const receivedTable = {};
+const users = require('../shared/utility').users; // list of users. the key is the email of the user
+
+const sentTable = {}; // the key is the email of the user that sent the email
+const receivedTable = {}; // the key is the email of the user that received the email
 
 
-const handleValidationRoutesErrors = req => {
-  const reqErrors = validationResult(req);
-  if(!reqErrors.isEmpty()){
-    let messages = reqErrors.errors.reduce((prev, curr) => {
-      if(!prev.includes(curr['msg'])) {
-        prev.push(curr['msg']);
-      }
-      return prev;
-    }, []);
-    return {
-      type: 'failure',
-      messages
-    }
-  }
-  return {
-    type: 'success'
-  }
-};
 
-const handleErrors = (req, res) => {
-  const routeErrors = handleValidationRoutesErrors(req);
-  if(routeErrors.type === 'failure') {
-    res.status(400).json({
-      type: 'failure',
-      messages: routeErrors.messages
-    });
-    return false;
-  }
-  return true;
-}
 
 const addToTable = (req, table, key) => {
   if (table[key]) {
     table[key].push(
       new Message(
-        req.body.sender, 
+        req.user.email, 
         req.body.receiver, 
         req.body.message, 
         req.body.subject
@@ -49,7 +23,7 @@ const addToTable = (req, table, key) => {
     );
   } else {
     table[key] = [new Message(
-      req.body.sender, 
+      req.user.email, 
       req.body.receiver, 
       req.body.message, 
       req.body.subject
@@ -69,7 +43,14 @@ const removeFromTable = (table, key, creationDate) => {
 exports.post = (req, res, next) => {
   try {
     if (!handleErrors(req, res)) return;
-    addToTable(req, sentTable, req.body.sender);
+    if (!users[req.body.receiver]) {
+      return res.status(400).json({
+        type: 'failure',
+        messages: ['Recipient does not exist.']
+      });
+    }
+
+    addToTable(req, sentTable, req.user.email);
     addToTable(req, receivedTable, req.body.receiver);
     res.status(200).json({
       type: 'success'
@@ -86,8 +67,8 @@ exports.get = (req, res, next) => {
 
     res.status(200).json({
       type: 'success',
-      sent: sentTable[req.query.id] || [],
-      received: receivedTable[req.query.id] || [],
+      sent: sentTable[req.user.email] || [],
+      received: receivedTable[req.user.email] || [],
     });
 
   } catch (err) {
@@ -100,17 +81,16 @@ exports.delete = (req, res, next) => {
   try {
     if (!handleErrors(req, res)) return;
 
-
     if (req.body.type === 'sent') {
-      removeFromTable(sentTable, req.body.sender, req.body.creation);
+      removeFromTable(sentTable, req.user.email, req.body.creation);
     } else {
-      removeFromTable(receivedTable, req.body.receiver, req.body.creation);
+      removeFromTable(receivedTable, req.user.email, req.body.creation);
     }
 
     res.status(200).json({
       type: 'success',
-      sent: sentTable[req.body.sender],
-      received: receivedTable[req.body.receiver],
+      sent: sentTable[req.user.email] || [],
+      received: receivedTable[req.user.email] || [],
     });
 
   } catch (err) {

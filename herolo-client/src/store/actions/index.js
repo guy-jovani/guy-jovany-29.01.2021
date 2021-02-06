@@ -8,3 +8,11 @@ export {
   resetManage,
   deleteManage
 } from './manage';
+
+export {
+  signupAttempt,
+  logoutAttempt,
+  loginAttempt,
+  autoLoginAttempt,
+  newToken
+} from './auth';

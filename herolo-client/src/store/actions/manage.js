@@ -1,7 +1,8 @@
 import * as actionTypes from '../actions/actionTypes';
 import axios from 'axios';
-
-const url = 'https://herolo-test-1.herokuapp.com/manage/';
+import { refreshToken } from './utility';
+const url = 'https://herolo-test-1.herokuapp.com/email/';
+// const url = 'http://localhost:5000/email/';
 
 const getMsgRes = payload => {
   return {
@@ -12,9 +13,11 @@ const getMsgRes = payload => {
 
 
 export const getMessagesAttempt = payload => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch({ type: actionTypes.MANAGE_LOADING });
-    axios.get(url + 'get?id=' + payload)
+    axios.get(url + 'get?id=' + payload,
+        { headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`}} 
+    )
     .then(res => {
       dispatch(getMsgRes({
         success: true,
@@ -23,19 +26,20 @@ export const getMessagesAttempt = payload => {
       }));
     })
     .catch(err => {
-      console.log(err)
-      dispatch(getMsgRes({
-        errorMessages: err.response.data.messages,
-        success: false
-      }));
+      if (err.response.data.type === 'TokenExpiredError') {
+        refreshToken(dispatch, getMessagesAttempt, getMsgRes, payload, getState().authReducer.timeoutId);
+      } else {
+        dispatch(getMsgRes({
+          errorMessages: err.response.data.messages,
+          success: false
+        }));
+      }
     });
   };
 };
 
-export const resetManage = payload => {
-  return dispatch => {
-    dispatch({ type: actionTypes.MANAGE_RESET });
-  };
+export const resetManage = () => {
+  return { type: actionTypes.MANAGE_RESET };
 }
 const getDeleteRes = payload => {
   return {
@@ -45,13 +49,15 @@ const getDeleteRes = payload => {
 }
 
 export const deleteManage = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch({ type: actionTypes.MANAGE_LOADING });
     axios.delete(url + 'delete', {
-      data: { 
-        ...payload
+        data: { 
+          ...payload
+        },
+        headers: {"Authorization" : `Bearer ${JSON.parse(localStorage.getItem('token'))}`}
       }
-    })
+    )
     .then(res => {
       dispatch(getDeleteRes({
         success: true,
@@ -60,10 +66,14 @@ export const deleteManage = payload => {
       }));
     })
     .catch(err => {
-      dispatch(getDeleteRes({
-        errorMessages: ['There was an unexpected error, please notify the admins and try again later.'],
-        success: false
-      }));
+      if (err.response.data.type === 'TokenExpiredError') {
+        refreshToken(dispatch, deleteManage, getDeleteRes, payload, getState().authReducer.timeoutId);
+      } else {
+        dispatch(getDeleteRes({
+          errorMessages: err.response.data.messages,
+          success: false
+        }));
+      }
     });
   };
 }

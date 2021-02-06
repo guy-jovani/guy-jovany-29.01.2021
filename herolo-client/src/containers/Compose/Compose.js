@@ -18,22 +18,6 @@ const Compose = props => {
 
   const [form, setForm] = useState({
     emailForm: {
-      sender: {
-        elementType: 'input', 
-        elementProps: {
-          type: 'text',
-          id: 'sender',
-          placeholder: "Your Id.",
-          value: ''
-        },
-        validation: {
-          required: true,
-          isNumeric: true
-        },
-        valid: false,
-        errorMessages: [],
-        label: 'Sender Id:'
-      },
       subject: {
         elementType: 'input', 
         elementProps: {
@@ -53,18 +37,18 @@ const Compose = props => {
       receiver: {
         elementType: 'input', 
         elementProps: {
-          type: 'text',
+          type: 'email',
           id: 'receiver',
-          placeholder: "Your receiver Id.",
+          placeholder: "Recipient Email.",
           value: ''
         },
         validation: {
           required: true,
-          isNumeric: true
+          isEmail: true
         },
         valid: false,
         errorMessages: [],
-        label: 'Receiver Id:'
+        label: 'Recipient Email:'
       },
       content: {
         elementType: 'textarea', 
@@ -93,15 +77,6 @@ const Compose = props => {
       setForm({
         formValid: false,
         emailForm: {
-          sender: {
-            ...form.emailForm.sender,
-            elementProps: {
-              ...form.emailForm.sender.elementProps,
-              value: ''
-            },
-            valid: false,
-            errorMessages: [],
-          },
           subject: {
             ...form.emailForm.subject,
             elementProps: {
@@ -147,12 +122,11 @@ const Compose = props => {
       }, 2000);
       return;
     }
-    const sender = form.emailForm.sender.elementProps.value;
     const receiver = form.emailForm.receiver.elementProps.value;
     const subject = form.emailForm.subject.elementProps.value;
     const content = form.emailForm.content.elementProps.value;
     
-    props.onSubmit({sender, receiver, subject, content});
+    props.onSubmit({receiver, subject, content});
   };
 
   const hideMsg = () => {
