@@ -4,8 +4,8 @@ import { newToken } from './auth';
 
 import { logoutAttempt } from './auth';
 
-const url = 'http://localhost:5000/auth/';
-// const url = 'https://herolo-test-1.herokuapp.com/auth/';
+// const url = 'http://localhost:5000/auth/';
+const url = 'https://herolo-test-1.herokuapp.com/auth/';
 
 export const refreshToken = (dispatch, methodOnSuccess, methodOnErr, payload, oldTimeout) => {
   axios.get(url + `rToken/?rToken=${localStorage.getItem('rToken')}`)

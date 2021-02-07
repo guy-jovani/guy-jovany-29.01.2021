@@ -4,7 +4,6 @@ import axios from 'axios';
 import { refreshToken, autoLogout, saveToLocalStorage } from './utility';
 // const url = 'http://localhost:5000/auth/';
 const url = 'https://herolo-test-1.herokuapp.com/auth/';
- 
 
 export const newToken = payload => {
   return {
@@ -82,8 +81,6 @@ export const signupAttempt = payload => {
       successAuth(dispatch, res.data);
     })
     .catch(err => {
-      console.log(err)
-      console.log(err.data)
       console.log(err.response)
       dispatch(authRes({
         errorMessages: err.response.data.messages,
