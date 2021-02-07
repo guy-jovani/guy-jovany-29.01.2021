@@ -9,7 +9,7 @@ const handleErrors = require('../shared/utility').handleErrors;
 const users = require('../shared/utility').users; // the key is the email of the user
 
 let id = 0; // will fulfill the rule of a DB id
-
+ 
 
 /**
  * Creates a Jason Web Token, that expires in process.env.JWT_TOKEN_EXPIRATION_SECONDS
