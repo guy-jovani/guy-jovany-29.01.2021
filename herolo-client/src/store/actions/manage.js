@@ -26,6 +26,8 @@ export const getMessagesAttempt = payload => {
       }));
     })
     .catch(err => {
+      console.log(err)
+      console.log(err.response)
       if (err.response.data.type === 'TokenExpiredError') {
         refreshToken(dispatch, getMessagesAttempt, getMsgRes, payload, getState().authReducer.timeoutId);
       } else {

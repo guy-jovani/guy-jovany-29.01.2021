@@ -82,6 +82,9 @@ export const signupAttempt = payload => {
       successAuth(dispatch, res.data);
     })
     .catch(err => {
+      console.log(err)
+      console.log(err.data)
+      console.log(err.response)
       dispatch(authRes({
         errorMessages: err.response.data.messages,
         success: false
